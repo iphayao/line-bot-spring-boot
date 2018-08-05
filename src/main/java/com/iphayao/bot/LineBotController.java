@@ -11,16 +11,17 @@ import com.linecorp.bot.model.response.BotApiResponse;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
+import lombok.NonNull;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.NonNull;
 
-import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+
 
 @LineMessageHandler
 public class LineBotController {
@@ -41,10 +42,10 @@ public class LineBotController {
         System.out.println("event: " + event);
     }
 
-    private void reply(@NonNull String replyToken, @NotNull List<Object> messages) {
+    private void reply(@NonNull String replyToken, @NonNull List<Message> messages) {
         try {
             BotApiResponse response = lineMessagingClient.replyMessage(
-                    new ReplyMessage(replyToken, (Message) messages)).get();
+                    new ReplyMessage(replyToken, messages)).get();
             log.info("Sent message: " + response);
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
