@@ -4,16 +4,16 @@ import com.linecorp.bot.client.LineMessagingClient;
 import com.linecorp.bot.model.ReplyMessage;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
+import com.linecorp.bot.model.event.message.StickerMessageContent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.Message;
+import com.linecorp.bot.model.message.StickerMessage;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.model.response.BotApiResponse;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
-
 import lombok.NonNull;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
@@ -21,20 +21,28 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-
-
+@Slf4j
 @LineMessageHandler
 public class LineBotController {
-    Log log = LogFactory.getLog(LineBotController.class);
 
     @Autowired
     private LineMessagingClient lineMessagingClient;
 
     @EventMapping
     public void handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
-        System.out.println("event: " + event);
+        log.info(event.toString());
         TextMessageContent message = event.getMessage();
         handleTextContent(event.getReplyToken(), event, message);
+    }
+
+    @EventMapping
+    public void handleStickerMessageEvent(MessageEvent<StickerMessageContent> event) {
+        log.info(event.toString());
+        handleSticker(event.getReplyToken(), event.getMessage());
+    }
+
+    private void handleSticker(String replyToken, StickerMessageContent content) {
+        reply(replyToken, new StickerMessage(content.getPackageId(), content.getStickerId()));
     }
 
     @EventMapping
