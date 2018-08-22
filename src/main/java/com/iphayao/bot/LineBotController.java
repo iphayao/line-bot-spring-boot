@@ -77,7 +77,7 @@ public class LineBotController {
     private void handleTextContent(String replyToken, Event event, TextMessageContent content) {
         String text = content.getText();
 
-        log.info("Got text message form " + replyToken + ": " + text);
+        log.info("Got text message from " + replyToken + ": " + text);
         switch (text) {
             case "profile": {
                 String userId = event.getSource().getUserId();
