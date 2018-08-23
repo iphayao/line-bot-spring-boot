@@ -98,6 +98,10 @@ public class LineBotController {
                 }
                 break;
             }
+            case "flex": {
+                this.reply(replyToken, new RestaurantFlexMessageSupplier().get());
+                break;
+            }
             default:
                 log.info("Return echo message " + replyToken + ":" + text);
                 this.replyText(replyToken, text);
