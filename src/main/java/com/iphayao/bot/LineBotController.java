@@ -1,5 +1,6 @@
 package com.iphayao.bot;
 
+import com.iphayao.bot.flex.*;
 import com.linecorp.bot.client.LineMessagingClient;
 import com.linecorp.bot.model.ReplyMessage;
 import com.linecorp.bot.model.event.Event;
@@ -77,6 +78,8 @@ public class LineBotController {
     private void handleTextContent(String replyToken, Event event, TextMessageContent content) {
         String text = content.getText();
 
+        String flexMenu = "richmenu-7f3ab049e1c434eac55b8aec74ea8689";
+
         log.info("Got text message from " + replyToken + ": " + text);
         switch (text) {
             case "profile": {
@@ -98,8 +101,36 @@ public class LineBotController {
                 }
                 break;
             }
-            case "flex": {
+            case "Flex Back": {
+                String userId = event.getSource().getUserId();
+                if(userId != null) {
+                    lineMessagingClient.linkRichMenuIdToUser(userId, flexMenu);
+                    return;
+                }
+                break;
+            }
+            case "Flex Restaurant": {
                 this.reply(replyToken, new RestaurantFlexMessageSupplier().get());
+                break;
+            }
+            case "Flex Menu": {
+                this.reply(replyToken, new RestaurantMenuFlexMessageSupplier().get());
+                break;
+            }
+            case "Flex Receipt": {
+                this.reply(replyToken, new ReceiptFlexMessageSupplier().get());
+                break;
+            }
+            case "Flex News": {
+                this.reply(replyToken, new NewsFlexMessageSupplier().get());
+                break;
+            }
+            case "Flex Ticket": {
+                this.reply(replyToken, new TicketFlexMessageSupplier().get());
+                break;
+            }
+            case "Flex Catalogue": {
+                this.reply(replyToken, new CatalogueFlexMessageSupplier().get());
                 break;
             }
             default:

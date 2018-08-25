@@ -1,4 +1,4 @@
-package com.iphayao.bot;
+package com.iphayao.bot.flex;
 
 import com.linecorp.bot.model.action.URIAction;
 import com.linecorp.bot.model.message.FlexMessage;
@@ -18,21 +18,26 @@ import static java.util.Arrays.asList;
 public class RestaurantFlexMessageSupplier implements Supplier<FlexMessage> {
     @Override
     public FlexMessage get() {
-        final Image heroBlock = Image.builder()
-                .url("https://2553d2b9.ngrok.io/cafe.png")
+        final Image heroBlock = createHeroBlock();
+        final Box bodyBlock = createBodyBlock();
+        final Box footerBlock = createFooterBlock();
+
+        final Bubble bubbleContainer = Bubble.builder()
+                .hero(heroBlock)
+                .body(bodyBlock)
+                .footer(footerBlock)
+                .build();
+        return new FlexMessage("Restaurant", bubbleContainer);
+    }
+
+    private Image createHeroBlock() {
+        return Image.builder()
+                .url("https://2553d2b9.ngrok.io/img/cafe.png")
                 .size(Image.ImageSize.FULL_WIDTH)
                 .aspectRatio(ImageAspectRatio.R20TO13)
                 .aspectMode(ImageAspectMode.Cover)
                 .action(new URIAction("label", "http://example.com"))
                 .build();
-        final Box bodyBlock = createBodyBlock();
-        final Box footerBlock = createFooterBlock();
-        final Bubble bubble = Bubble.builder()
-                .hero(heroBlock)
-                .body(bodyBlock)
-                .footer(footerBlock)
-                .build();
-        return new FlexMessage("ALT", bubble);
     }
 
     private Box createBodyBlock() {
@@ -96,11 +101,11 @@ public class RestaurantFlexMessageSupplier implements Supplier<FlexMessage> {
     private Box createReviewBox() {
         final Icon goldStar = Icon.builder()
                 .size(FlexFontSize.SM)
-                .url("https://2553d2b9.ngrok.io/gold_star.png")
+                .url("https://2553d2b9.ngrok.io/img/gold_star.png")
                 .build();
         final Icon grayStar = Icon.builder()
                 .size(FlexFontSize.SM)
-                .url("https://2553d2b9.ngrok.io/gray_star.png")
+                .url("https://2553d2b9.ngrok.io/img/gray_star.png")
                 .build();
         final Text point = Text.builder()
                 .text("4.0")
